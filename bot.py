@@ -1,4 +1,5 @@
 import os
+import subprocess
 import discord
 import re
 from random import randint
@@ -15,7 +16,7 @@ players = []
 _playing = false
 _celebrationUrl = "https://tenor.com/view/winner-gif-22069448"
 _disgraceUrl = "https://tenor.com/view/failure-fail-effort-loser-losers-gif-16219069"
-TOKEN = "OTE2MjA4ODI3ODU3MjU2NTAw.Yamz9g.ArtHWWvK-T1e_puOpfRcH_LZXuQ"
+TOKEN = "OTE2MjA4ODI3ODU3MjU2NTAw.Yamz9g.amvEv0bV4h0YMhlEuAH-IF57-eY"
 bot = commands.Bot(command_prefix="!")
 
 
@@ -33,7 +34,7 @@ class game():
             self.guessedWord = self.guessedWord + "-"
         print("\n")
         print("init complete.")
-        print(self.gameWord.strip())
+        #print(self.gameWord.strip())
         print(self.guessedWord)
         print(self.readyPlayer)
 
@@ -48,7 +49,7 @@ async def on_message(message):
     bountyUserId = re.findall("([\d]+)",newGame.readyPlayer)
     print(bountyUserId)
     print(str(message.author) + " said " + "\"" + message.content + "\"")
-    if message.channel.name == "game":
+    if message.channel.name == "hangman":
         if newGame.gameInProgress == True:
            if message.author.id == int(bountyUserId[0]):
                #print("*&^*&(%&*^$&%$&)*&^(*&%^#^%&&(%&^&^*($#@#$%^&*&^%$#$%^&*")
@@ -101,7 +102,7 @@ async def start(ctx):
     await ctx.send("Game starting!")
     print("Starting a game with " + str(len(players)) + " player(s)")
     newGame.readyPlayer = players[0]
-    await ctx.guild.create_text_channel("game")
+    await ctx.guild.create_text_channel("hangman")
     await gameSay(ctx)
     await messageGameChannel(ctx,newGame.guessedWord)
     await messageGameChannel(ctx,newGame.readyPlayer + "it's your turn.")
@@ -111,7 +112,7 @@ async def start(ctx):
 @bot.command()
 async def cleanup(ctx):
     for channel in ctx.guild.channels:
-        if channel.name == "game":
+        if channel.name == "hangman":
             await channel.delete()
 
 @bot.command()
@@ -122,7 +123,7 @@ async def shutdown(ctx):
 
 async def messageGameChannel(ctx,message):
     for channel in ctx.guild.channels:
-        if channel.name == "game":
+        if channel.name == "hangman":
             await channel.send(message)
 
 async def messageGeneralChannel(ctx,message):
@@ -132,7 +133,7 @@ async def messageGeneralChannel(ctx,message):
 
 async def gameSay(ctx):
     for channel in ctx.guild.channels:
-        if channel.name == "game":
+        if channel.name == "hangman":
             await channel.send("@everyone")
 
 
@@ -218,22 +219,27 @@ async def endGame(ctx,win):
         await messageGeneralChannel(ctx,_disgraceUrl)
         await bot.close()
 
+
+
 #for debugging purposes
-newPlayers = []
-for player in players:
-    newPlayers.append("<" + "@" + "!" + str(player) + ">")
-    players = newPlayers
-print(players)
+#newPlayers = []
+#for player in players:
+#    newPlayers.append("<" + "@" + "!" + str(player) + ">")
+#    players = newPlayers
+#print(players)
 #input()
 #10 guesses
 #re.findall("([\d]+)",ctx.message.content)
+
 wordList = open("list2.txt",'r')
 wordArray = []
 for line in wordList:
     wordArray.append(line.strip())
 wordList.close()
 
-os.system("cls")
+os.system("clear")
 newGame = game(wordArray[randint(0,len(wordArray) - 1)])
 #input()
 bot.run(TOKEN)
+currentDirectory = os.getcwd()
+subprocess.run(["python3","bot.py"])
