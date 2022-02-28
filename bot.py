@@ -1,5 +1,3 @@
-import os
-import subprocess
 import discord
 import re
 from random import randint
@@ -237,9 +235,7 @@ for line in wordList:
     wordArray.append(line.strip())
 wordList.close()
 
-os.system("clear")
+
 newGame = game(wordArray[randint(0,len(wordArray) - 1)])
 #input()
 bot.run(TOKEN)
-currentDirectory = os.getcwd()
-subprocess.run(["python3","bot.py"])
