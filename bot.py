@@ -11,7 +11,6 @@ true = True
 #8 player max
 alphabet = ['','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
 players = []
-_playing = false
 _celebrationUrl = "https://tenor.com/view/winner-gif-22069448"
 _disgraceUrl = "https://tenor.com/view/failure-fail-effort-loser-losers-gif-16219069"
 TOKEN = "OTE2MjA4ODI3ODU3MjU2NTAw.Yamz9g.amvEv0bV4h0YMhlEuAH-IF57-eY"
@@ -30,11 +29,11 @@ class game():
         for char in self.gameWord:
             self.requiredChars.append(char)
             self.guessedWord = self.guessedWord + "-"
-        print("\n")
-        print("init complete.")
+        #print("\n")
+        #print("init complete.")
         #print(self.gameWord.strip())
-        print(self.guessedWord)
-        print(self.readyPlayer)
+        #print(self.guessedWord)
+        #print(self.readyPlayer)
 
 @bot.event
 async def on_ready():
@@ -45,8 +44,8 @@ async def on_message(message):
     if message.author == bot.user:
         return
     bountyUserId = re.findall("([\d]+)",newGame.readyPlayer)
-    print(bountyUserId)
-    print(str(message.author) + " said " + "\"" + message.content + "\"")
+    #print(bountyUserId)
+    #print(str(message.author) + " said " + "\"" + message.content + "\"")
     if message.channel.name == "hangman":
         if newGame.gameInProgress == True:
            if message.author.id == int(bountyUserId[0]):
@@ -71,7 +70,7 @@ async def join(ctx):
     else:
         players.append(playerMention)
         message = playerMention + " joined the game!"
-    print(message)
+    #print(message)
     await ctx.send(message)
 
 @bot.command()
@@ -81,7 +80,7 @@ async def leave(ctx):
     if playerMention in players:
         players.remove(playerMention)
         message = playerMention + " left the game!"
-        print(message)
+        #print(message)
         await ctx.send(message)
 
 
@@ -98,7 +97,7 @@ async def start(ctx):
         return
     await ctx.send(players)
     await ctx.send("Game starting!")
-    print("Starting a game with " + str(len(players)) + " player(s)")
+    #print("Starting a game with " + str(len(players)) + " player(s)")
     newGame.readyPlayer = players[0]
     await ctx.guild.create_text_channel("hangman")
     await gameSay(ctx)
@@ -109,12 +108,14 @@ async def start(ctx):
 
 @bot.command()
 async def cleanup(ctx):
-    for channel in ctx.guild.channels:
-        if channel.name == "hangman":
-            await channel.delete()
+    if str(ctx.message.author.id) == "621083507870924831":
+        await ctx.channel.send("Restarting...")
+        for channel in ctx.guild.channels:
+            if channel.name == "hangman":
+                await channel.delete()
 
 @bot.command()
-async def shutdown(ctx):
+async def reboot(ctx):
     if str(ctx.message.author.id) == "621083507870924831":
         print("Shutdown command issued.")
         await bot.close()
