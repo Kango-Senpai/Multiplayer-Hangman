@@ -13,7 +13,7 @@ alphabet = ['','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','
 players = []
 _celebrationUrl = "https://tenor.com/view/winner-gif-22069448"
 _disgraceUrl = "https://tenor.com/view/failure-fail-effort-loser-losers-gif-16219069"
-TOKEN = "OTE2MjA4ODI3ODU3MjU2NTAw.Yamz9g.amvEv0bV4h0YMhlEuAH-IF57-eY"
+TOKEN = "OTE2MjA4ODI3ODU3MjU2NTAw.Yamz9g.kJe7UEjOXEUJT8AHGzjAUXxffJ4"
 bot = commands.Bot(command_prefix="!")
 
 
@@ -65,6 +65,8 @@ async def join(ctx):
     message = ""
     if playerMention in players:
         message = playerMention + " you are already in the game!"
+    elif newGame.gameInProgress == True:
+        message = playerMention + " the game has already started. Please wait until the next round, or report a broken game."
     elif len(players) == 8:
         message = playerMention + " sorry, this game is full!"
     else:
