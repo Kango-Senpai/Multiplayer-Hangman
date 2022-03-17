@@ -13,7 +13,7 @@ alphabet = ['','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','
 players = []
 _celebrationUrl = "https://tenor.com/view/winner-gif-22069448"
 _disgraceUrl = "https://tenor.com/view/failure-fail-effort-loser-losers-gif-16219069"
-TOKEN = "OTE2MjA4ODI3ODU3MjU2NTAw.Yamz9g.kJe7UEjOXEUJT8AHGzjAUXxffJ4"
+TOKEN = ""
 bot = commands.Bot(command_prefix="!")
 
 
@@ -111,16 +111,23 @@ async def start(ctx):
 @bot.command()
 async def cleanup(ctx):
     if str(ctx.message.author.id) == "621083507870924831":
-        await ctx.channel.send("Restarting...")
         for channel in ctx.guild.channels:
             if channel.name == "hangman":
                 await channel.delete()
 
+
 @bot.command()
 async def reboot(ctx):
     if str(ctx.message.author.id) == "621083507870924831":
-        print("Shutdown command issued.")
+        await ctx.channel.send("Restarting...")
+        #print("Shutdown command issued.")
         await bot.close()
+
+async def gameCleanup(ctx):
+    for channel in ctx.guild.channels:
+        if channel.name == "hangman":
+            await channel.delete()
+
 
 async def messageGameChannel(ctx,message):
     for channel in ctx.guild.channels:
@@ -210,13 +217,13 @@ async def endGame(ctx,win):
     if win == True:
         print("Win")
         await messageGeneralChannel(ctx,"The word was \'%s\'" % newGame.gameWord)
-        await cleanup(ctx)
+        await gameCleanup(ctx)
         await messageGeneralChannel(ctx,_celebrationUrl)
         await bot.close()
     else:
         print("Loss")
         await messageGeneralChannel(ctx,"The word was \'%s\'" % newGame.gameWord)
-        await cleanup(ctx)
+        await gameCleanup(ctx)
         await messageGeneralChannel(ctx,_disgraceUrl)
         await bot.close()
 
